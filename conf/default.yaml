@@ -1,0 +1,16 @@
+# Server Config
+serverLogPath: "C:/Users/<MyName>/AppData/Local/ArkCLI/Logs"
+
+# Game Config
+steamCmdPath: "C:/Users/<MyName>/AppData/Local/ArkCLI/SteamCMD"
+gameBasePath: "C:/Users/<MyName>/AppData/Local/ArkServer"
+startCommand: "ShooterGameServer.exe TheIsland?listen -server -log"
+gamePort: 7777
+queryPort: 27015
+RCONPort: 32330
+adminPassword: ""
+#modIds:
+#  - 0
+
+# Runtime Config
+autoRestart: true
