@@ -20,8 +20,12 @@ class RestoreCommand(Command):
         saved_dir = config["gameBasePath"] + "/" + self.name + "/ShooterGame/Saved"
 
         formatted_date = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-        os.rename(saved_dir + "/SavedArks", saved_dir + "/SavedArks.bak." + formatted_date)
-        os.rename(saved_dir + "/SaveGames", saved_dir + "/SaveGames.bak." + formatted_date)
+
+        if os.path.exists(saved_dir + "/SavedArks"):
+            os.rename(saved_dir + "/SavedArks", saved_dir + "/SavedArks.bak." + formatted_date)
+
+        if os.path.exists(saved_dir + "/SaveGames"):
+            os.rename(saved_dir + "/SaveGames", saved_dir + "/SaveGames.bak." + formatted_date)
 
         zipfile = ZipFile(backup_file, mode='r')
         zipfile.extractall(saved_dir)

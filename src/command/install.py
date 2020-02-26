@@ -19,7 +19,7 @@ class InstallCommand(Command):
         if not os.path.isfile(steamcmd.steamcmd_exe):
             steamcmd.install()
 
-        game_path = os.path.join(config["gameBasePath"], self.name)
+        game_path = config["gameBasePath"] + "/" + self.name
         if not os.path.exists(game_path):
             os.makedirs(game_path)
 

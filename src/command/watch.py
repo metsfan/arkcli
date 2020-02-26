@@ -3,7 +3,6 @@ import os
 from src.command.command import Command
 from subprocess import Popen
 from psutil import Process, NoSuchProcess
-
 from src.helper.game_helper import GameHelper
 
 
@@ -27,10 +26,9 @@ class WatchCommand(Command):
                     # Pid file still exists, so this was not a graceful shutdown, so start it up again
                     print("Unexpected shutdown detected. Restarting server.")
                     devnull = open(os.devnull, 'wb')
-                    Popen(["python", "main.py", "restart"], stdout=devnull, stderr=devnull)
+                    Popen(["python3", "main.py", "restart"], stdout=devnull, stderr=devnull)
                 else:
                     print("Ending watcher, process was stopped normally")
-
                 break
 
 

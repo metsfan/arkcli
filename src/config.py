@@ -12,4 +12,7 @@ class Config:
             self.data = load(content, Loader=FullLoader)
 
     def __getitem__(self, item):
-        return self.data[item]
+        if item in self.data:
+            return self.data[item]
+        else:
+            return None

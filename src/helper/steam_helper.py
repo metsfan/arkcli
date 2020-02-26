@@ -14,14 +14,20 @@ class SteamHelper:
             validate=True
         )
 
+        SteamHelper.install_mods(steamcmd, config, name)
+
+    @staticmethod
+    def install_mods(steamcmd, config, name):
+        game_path = os.path.join(config["gameBasePath"], name)
         mods = config["modIds"]
 
-        for mod in mods:
-            steamcmd.install_workshopfiles(
-                gameid=376030,
-                workshop_id=mod,
-                game_install_dir=game_path,
-                user='anonymous',
-                password=None,
-                validate=True
-            )
+        if mods is not None:
+            for mod in mods:
+                steamcmd.install_workshopfiles(
+                    gameid=376030,
+                    workshop_id=mod,
+                    game_install_dir=game_path,
+                    user='anonymous',
+                    password=None,
+                    validate=True
+                )

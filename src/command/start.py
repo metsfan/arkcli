@@ -1,8 +1,12 @@
 import os
+import time
+from threading import Thread
+
 from src.command.command import Command
 from subprocess import Popen
 
 from src.command.stop import StopCommand
+from src.command.watch import WatchCommand
 from src.helper.game_helper import GameHelper
 
 from psutil import Process, NoSuchProcess
@@ -15,12 +19,17 @@ class StartCommand(Command):
         self.auto_restart = auto_restart
 
     def run(self, config):
+        self.start_server(config)
+
+    def start_server(self, config):
         game_path = GameHelper.game_path(config, self.name)
         if not os.path.exists(game_path):
             raise FileNotFoundError("Path not found for name " + self.name)
 
         if self.stop_if_started:
-            StopCommand(self.name).run(config)
+            StopCommand(self.name, schedule=None).run(config)
+            # Give any active watcher time to quit
+            time.sleep(1.5)
         else:
             if GameHelper.running_pid(config, self.name) is not None:
                 print("Game instance " + self.name + " is already started")
@@ -43,6 +52,22 @@ class StartCommand(Command):
             if not os.path.exists(log_dir):
                 os.makedirs(log_dir)
 
-            server_log = open(log_dir + "/ServerLog.txt", 'wb')
-            Popen(["python", "main.py", "watch", "--pid", str(proc.pid)], stdout=server_log, stderr=server_log)
+            Thread(target=self.start_watch, args=(proc.pid, config), daemon=True)\
+                .start()
 
+    def start_watch(self, pid, config):
+        print("Started watcher on pid " + str(pid))
+
+        while True:
+            try:
+                Process(pid)
+                # print("pid " + str(pid) + " still running. All is well.")
+                time.sleep(1)
+            except NoSuchProcess:
+                if GameHelper.running_pid(config, self.name) is not None:
+                    # Pid file still exists, so this was not a graceful shutdown, so start it up again
+                    # print("Unexpected shutdown detected. Restarting server.")
+                    self.stop_if_started = True
+                    self.start_server(config)
+
+                break
