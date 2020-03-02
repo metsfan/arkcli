@@ -6,18 +6,18 @@ from src.command.command import Command
 
 
 class RestoreCommand(Command):
-    def __init__(self, name, file):
-        self.name = name
+    def __init__(self, file):
         self.file = file
 
-    def run(self, config):
-        backup_file = config["gameBasePath"] + "/" + self.name + "/backup/" + self.file + ".zip"
+    def run(self, server):
+        config = server.config
+        backup_file = config["gameBasePath"] + "/" + server.name + "/backup/" + self.file + ".zip"
 
         if not os.path.exists(backup_file):
             print("Backup not found")
             return
 
-        saved_dir = config["gameBasePath"] + "/" + self.name + "/ShooterGame/Saved"
+        saved_dir = config["gameBasePath"] + "/" + server.name + "/ShooterGame/Saved"
 
         formatted_date = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 

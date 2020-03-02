@@ -2,14 +2,14 @@ import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
+from src.config import Config
+
 from src.command.backup import BackupCommand
 from src.command.cleanup import CleanupCommand
 from src.command.create import CreateCommand
 from src.command.installmods import InstallModsCommand
 from src.command.rcon import RconCommand
 from src.command.restore import RestoreCommand
-from src.command.watch import WatchCommand
-from src.config import Config
 from src.command.install import InstallCommand
 from src.command.update import UpdateCommand
 from src.command.start import StartCommand

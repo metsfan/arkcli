@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="frontend/javascript/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="frontend/javascript/frontend.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="frontend/css/frontend.css"/>
+</head>
+<body>
+
+<div id="content">
+    <div id="header">
+        Server Name <input type="text" id="server_name" value="arena"/>
+        <button id="use_server_name">Use</button>
+    </div>
+    <div id="install">
+        <div id="not_installed">Server is not installed</div>
+        <div id="installing">Installing...</div>
+        <button id="install_button">Install</button>
+    </div>
+    <div id="info">
+        <div class="server-status">
+            <h3>Status</h3>
+            <label>Server Status: </label>
+            <span id="status" class="online">Online (pid 12345)</span>
+        </div>
+        <div id="stats">
+            <h3>Server Info</h3>
+            <div class="stats-item">
+                <label>Server Name</label>
+                <span id="server_label" class="stat"></span>
+            </div>
+            <div class="stats-item">
+                <label>Map</label>
+                <span id="map_label" class="stat"></span>
+            </div>
+            <div class="stats-item">
+                <label>Players Online</label>
+                <span id="players_online" class="stat">70/70</span>
+            </div>
+        </div>
+        <div id="control-buttons">
+            <h3>Controls</h3>
+            <button id="start_button">Start</button>
+            <button id="restart_button">Restart</button>
+            <button id="stop_button">Stop</button>
+            <input type="checkbox" id="stop_with_warning" name="stop_with_warning" checked/>
+            <label for="stop_with_warning">Stop with warning</label>
+            <div id="stop_with_warning_control">Stop Warning<input type="number" value="5" id="stop_warning"/></div>
+            <div id="command_wrapper">
+                <input type="text" id="rcon_command" placeholder="RCON Command"/>
+                <button id="execute_rcon_command">Execute Command</button>
+            </div>
+        </div>
+        <div id="restore">
+            <h3>Backups</h3>
+            Restore from backup
+            <select id="backup_select">
+                <option>Select Backup...</option>
+            </select>
+            <button id="restore_button">Restore</button>
+
+            <div id="helpers">
+                <button id="cleanup_button">Cleanup</button>
+                <button id="backup_button">Manual Backup</button>
+            </div>
+        </div>
+        <div id="config">
+            <h3>Directories</h3>
+            <button id="open_config_directory">Config</button>
+            <button id="open_saved_directory">Saved</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -2,3 +2,7 @@ python-valve
 psutil
 pyyaml
 pysteamcmd
+wheel
+pywebview
+flask
+requests

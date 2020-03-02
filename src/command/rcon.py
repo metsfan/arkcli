@@ -3,11 +3,11 @@ from valve.rcon import execute, RCONMessage, RCONCommunicationError, RCONAuthent
 
 
 class RconCommand(Command):
-    def __init__(self, name, command):
-        self.name = name
+    def __init__(self, command):
         self.command = command
 
-    def run(self, config):
+    def run(self, server):
+        config = server.config
         address = ("127.0.0.1", config["RCONPort"])
         password = config["adminPassword"]
 

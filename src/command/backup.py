@@ -6,20 +6,18 @@ from src.command.command import Command
 
 
 class BackupCommand(Command):
-    def __init__(self, name):
-        self.name = name
-
-    def run(self, config):
-        backup_dir = config["gameBasePath"] + "/" + self.name + "/backup"
+    def run(self, server):
+        config = server.config
+        backup_dir = config["gameBasePath"] + "/" + server.name + "/backup"
 
         if not os.path.exists(backup_dir):
             os.makedirs(backup_dir)
 
         formatted_date = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-        backup_file_name = backup_dir + "/backup_" + self.name + "_" + formatted_date + ".zip"
+        backup_file_name = backup_dir + "/backup_" + server.name + "_" + formatted_date + ".zip"
 
-        saved_arks_dir = config["gameBasePath"] + "/" + self.name + "/ShooterGame/Saved/SavedArks"
-        save_games_dir = config["gameBasePath"] + "/" + self.name + "/ShooterGame/Saved/SaveGames"
+        saved_arks_dir = config["gameBasePath"] + "/" + server.name + "/ShooterGame/Saved/SavedArks"
+        save_games_dir = config["gameBasePath"] + "/" + server.name + "/ShooterGame/Saved/SaveGames"
 
         zipfile = ZipFile(backup_file_name, mode='w', compression=ZIP_LZMA)
         if os.path.exists(saved_arks_dir):

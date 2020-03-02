@@ -2,6 +2,10 @@
 serverLogPath: "C:/Users/<MyName>/AppData/Local/ArkCLI/Logs"
 
 # Game Config
+backupIntervalMinutes: 30
+backupExpirationDays: 5
+updateCheckMinutes: 60
+autoUpdateWarnMinutes: 30
 steamCmdPath: "C:/Users/<MyName>/AppData/Local/ArkCLI/SteamCMD"
 gameBasePath: "C:/Users/<MyName>/AppData/Local/ArkServer"
 startCommand: "ShooterGameServer.exe TheIsland?listen -server -log"

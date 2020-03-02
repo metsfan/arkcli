@@ -1,38 +1,48 @@
-from tkinter import Tk
+import logging
+import webview
 
-from src.gui.server_details import ServerDetailsWidget
-from src.gui.server_name import ServerNameWidget
+from contextlib import redirect_stdout
+from io import StringIO
+from threading import Thread, Lock
+from time import sleep
 
+from src.api import Api
+from src.server import run_server
 
-class App:
-    def __init__(self):
-        self.window = Tk()
+server_lock = Lock()
 
-        self.window.title("Metsfan's Simple Ark Manager (Open Source)")
-        self.window.geometry("500x300")
-
-        self.name_widget = ServerNameWidget(self.window, self)
-
-        self.server_details_widget = ServerDetailsWidget(self.window, self)
-        self.server_details_widget.hide()
-
-        self.server_name = None
-
-    def run(self):
-        self.window.mainloop()
-
-    def on_server_changed(self, name):
-        self.server_name = name
-        print("Changed to server " + name)
-
-    def start_server(self):
-        print("Starting server " + self.server_name)
-
-    def stop_server(self):
-        print("Stopping server " + self.server_name)
-
-    def restart_server(self):
-        print("Restarting server " + self.server_name)
+logger = logging.getLogger(__name__)
 
 
-App().run()
+def url_ok(url, port):
+    # Use httplib on Python 2
+    from http.client import HTTPConnection
+
+    try:
+        conn = HTTPConnection(url, port)
+        conn.request('GET', '/')
+        r = conn.getresponse()
+        return r.status == 200
+    except:
+        logger.exception('Server not started')
+        return False
+
+
+if __name__ == '__main__':
+    stream = StringIO()
+    with redirect_stdout(stream):
+        logger.debug('Starting server')
+        t = Thread(target=run_server)
+        t.daemon = True
+        t.start()
+        logger.debug('Checking server')
+
+        while not url_ok('127.0.0.1', 23948):
+            sleep(1)
+
+        logger.debug('Server started')
+        api = Api()
+        window = webview.create_window('My first pywebview application', 'http://127.0.0.1:23948', js_api=api)
+        api.init_window(window)
+        webview.start(debug=True)
+
