@@ -1,5 +1,7 @@
 import json
 import time
+import os
+import webbrowser
 
 from threading import Thread
 
@@ -24,6 +26,9 @@ class Api:
         self.server = ArkServer(name)
         self.sync()
 
+    def reload(self):
+        self.server.reload_config()
+
     def install(self):
         self.server.install()
         self.sync()
@@ -46,6 +51,13 @@ class Api:
         self.server.restart(schedule)
         self.sync()
 
+    def update(self, with_warning, warning_minutes):
+        schedule = None
+        if with_warning:
+            schedule = warning_minutes
+        self.server.update(schedule)
+        self.sync()
+
     def backup(self):
         self.server.backup()
         self.sync()
@@ -59,7 +71,7 @@ class Api:
         self.sync()
 
     def fetchBackups(self):
-        print("reading backups")
+        return self.server.fetch_backups()
 
     def sync(self):
         if self.server is not None:
@@ -67,6 +79,10 @@ class Api:
             if status is not None:
                 status_json = json.dumps(status)
                 self.window.evaluate_js("sync(" + status_json + ")")
+
+    def open_server_config(self):
+        if self.server is not None:
+            webbrowser.open(os.path.dirname(self.server.config_path))
 
     def periodic_sync(self):
         while True:
@@ -76,7 +92,8 @@ class Api:
     def _periodic_update_check(self):
         while True:
             if self.server is not None and \
-                    self.server.config is not None:
+                    self.server.config is not None and \
+                    self.server.installed:
                 update_check_minutes = int(self.server.config["updateCheckMinutes"])
                 auto_update_schedule = int(self.server.config["autoUpdateWarnMinutes"])
                 self.server.update(schedule=auto_update_schedule)
@@ -85,7 +102,8 @@ class Api:
     def _periodic_backup(self):
         while True:
             if self.server is not None and \
-                    self.server.config is not None:
+                    self.server.config is not None and \
+                    self.server.installed:
                 backup_minutes = int(self.server.config["backupIntervalMinutes"])
                 self.server.backup()
                 time.sleep(backup_minutes * 60)

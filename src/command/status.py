@@ -5,9 +5,7 @@ import requests
 import valve.source.a2s
 import valve.source.master_server
 
-OFFLINE = 0
-STARTING = 1
-ONLINE = 2
+from src.server_status import ServerStatus
 
 
 class StatusCommand(Command):
@@ -17,31 +15,32 @@ class StatusCommand(Command):
     def run(self, server):
         status = {
             "installed": server.installed,
-            "installing": server.installing
+            "installing": server.installing,
+            "log": server.log.fetch()
         }
 
         if server.installed:
             status["running_pid"] = server.running_pid
             if server.running_pid is not None:
-                ip = requests.get('https://checkip.amazonaws.com').text.strip()
                 query_port = int(server.config["queryPort"])
                 try:
-                    with valve.source.a2s.ServerQuerier((ip, query_port)) as valve_server:
+                    with valve.source.a2s.ServerQuerier((server.ip, query_port)) as valve_server:
                         info = valve_server.info()
                         players = valve_server.players()
 
                         print("{player_count}/{max_players} {server_name}".format(**info))
-                        status["server_status"] = ONLINE
                         status["server_info"] = {
                             "max_players": info.values["max_players"],
                             "player_count": info.values["player_count"],
                             "server_name": info.values["server_name"],
                             "map": info.values["map"]
                         }
+
+                        server.running_status = ServerStatus.ONLINE
                 except NoResponseError:
-                    status["server_status"] = STARTING
-            else:
-                status["server_status"] = OFFLINE
+                    print("No Response")
+
+        status["server_status"] = server.running_status.value
 
         self.callback(status)
 

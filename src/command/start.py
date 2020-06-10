@@ -2,6 +2,7 @@ import os
 import time
 from threading import Thread
 
+from src.server_status import ServerStatus
 from src.command.command import Command
 from subprocess import Popen
 
@@ -21,6 +22,8 @@ class StartCommand(Command):
         self.start_server(server)
 
     def start_server(self, server):
+        server.running_status = ServerStatus.STARTING
+
         config = server.config
         game_path = GameHelper.game_path(config, server.name)
         if not os.path.exists(game_path):
@@ -32,16 +35,16 @@ class StartCommand(Command):
             time.sleep(1.5)
         else:
             if server.running_pid is not None:
-                print("Game instance " + server.name + " is already started")
+                server.log.append("Game instance " + server.name + " is already started")
                 return
 
-        print("Starting game instance " + server.name)
+        server.log.append("Starting game instance " + server.name)
 
         start_cmd = game_path + "/" + config["startCommand"]
 
         proc = Popen(start_cmd)
 
-        print("Started ark server with PID " + str(proc.pid))
+        server.log.append("Started ark server with PID " + str(proc.pid))
 
         pidfile = open(game_path + "/running_pid", "w")
         pidfile.write(str(proc.pid))

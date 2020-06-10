@@ -13,11 +13,17 @@
     <div id="header">
         Server Name <input type="text" id="server_name" value="arena"/>
         <button id="use_server_name">Use</button>
+        <button id="reload_config">Reload Config</button>
     </div>
     <div id="install">
-        <div id="not_installed">Server is not installed</div>
+        <h3>Installation</h3>
+        <div id="not_installed">Server is not installed. Make sure to update configs before installing.</div>
         <div id="installing">Installing...</div>
         <button id="install_button">Install</button>
+    </div>
+    <div id="config">
+        <h3>Directories</h3>
+        <button id="open_server_config">Server Config</button>
     </div>
     <div id="info">
         <div class="server-status">
@@ -45,6 +51,7 @@
             <button id="start_button">Start</button>
             <button id="restart_button">Restart</button>
             <button id="stop_button">Stop</button>
+            <button id="update_button">Update</button>
             <input type="checkbox" id="stop_with_warning" name="stop_with_warning" checked/>
             <label for="stop_with_warning">Stop with warning</label>
             <div id="stop_with_warning_control">Stop Warning<input type="number" value="5" id="stop_warning"/></div>
@@ -66,12 +73,14 @@
                 <button id="backup_button">Manual Backup</button>
             </div>
         </div>
-        <div id="config">
-            <h3>Directories</h3>
-            <button id="open_config_directory">Config</button>
-            <button id="open_saved_directory">Saved</button>
+        <div id="ark_config">
+            <h3>Server Directories</h3>
+            <button id="open_config_directory">ARK Config</button>
+            <button id="open_saved_directory">ARK Saved</button>
         </div>
     </div>
+</div>
+<div id="log">
 </div>
 
 </body>

@@ -9,7 +9,7 @@ class InstallCommand(Command):
     def run(self, server):
         server.installing = True
         config = server.config
-        print("Installing steamCMD if needed")
+        server.log.append("Installing steamCMD if needed")
         path = config['steamCmdPath']
         if not os.path.exists(path):
             os.makedirs(path)
@@ -22,7 +22,7 @@ class InstallCommand(Command):
         if not os.path.exists(game_path):
             os.makedirs(game_path)
 
-        print(Template('Installing game instance $name at path $game_path').substitute(
+        server.log.append(Template('Installing game instance $name at path $game_path').substitute(
             game_path=game_path,
             name=server.name
         ))

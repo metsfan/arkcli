@@ -1,3 +1,36 @@
 body {
     font-family: Arial sans-serif;
 }
+
+#log {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40vw;
+    height: 84vh;
+    overflow-y: scroll;
+    font-family: "Lucida Sans Typewriter";
+    background-color: black;
+    padding: 10px;
+    font-size: 10px;
+}
+
+#content {
+    width: 400px;
+}
+
+.level_0 {
+    color: #AAA;
+}
+
+.level_1 {
+    color: white;
+}
+
+.level_2 {
+    color: orange;
+}
+
+.level_3 {
+    color: tomato;
+}

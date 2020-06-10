@@ -18,8 +18,9 @@ class UpdateCommand(Command):
 
         steamcmd = SteamcmdEx(path)
 
-        if self.only_if_needed and \
+        if self.only_if_needed or \
                 not SteamHelper.has_game_update(steamcmd, config, server.name):
+            server.log.append("No updates available.")
             return
 
         running_pid = server.running_pid
@@ -30,7 +31,7 @@ class UpdateCommand(Command):
             StopCommand(schedule=self.schedule)\
                 .run(server)
 
-        print(Template('Updating game instance $name').substitute(
+        server.log.append(Template('Updating game instance $name').substitute(
             name=server.name
         ))
 

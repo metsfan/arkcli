@@ -16,10 +16,18 @@ class SteamHelper:
             password=None
         )
 
-        store_version = int(app_info.buildid)
-        game_version = GameHelper.current_game_version(config, name)
+        app_info = steamcmd.app_info_update(
+            gameid=AppId,
+            game_install_dir=game_path,
+            user='anonymous',
+            password=None
+        )
 
-        return store_version != game_version
+        # store_version = int(app_info.buildid)
+        # game_version = GameHelper.current_game_version(config, name)
+        #
+        # return store_version != game_version
+        return app_info != 0
 
     @staticmethod
     def install_game_and_mods(steamcmd, config, name):
@@ -35,15 +43,15 @@ class SteamHelper:
 
         SteamHelper.install_mods(steamcmd, config, name)
 
-        app_info = steamcmd.app_info_update(
-            gameid=AppId,
-            game_install_dir=game_path,
-            user='anonymous',
-            password=None
-        )
-
-        store_version = int(app_info.buildid)
-        GameHelper.write_game_version(config, name, store_version)
+        # app_info = steamcmd.app_info_update(
+        #     gameid=AppId,
+        #     game_install_dir=game_path,
+        #     user='anonymous',
+        #     password=None
+        # )
+        #
+        # store_version = int(app_info.buildid)
+        # GameHelper.write_game_version(config, name, store_version)
 
     @staticmethod
     def install_mods(steamcmd, config, name):

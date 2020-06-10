@@ -1,8 +1,10 @@
 import os
 from datetime import datetime
+from logging import ERROR
 from zipfile import ZipFile, ZIP_LZMA
 
 from src.command.command import Command
+from src.server_log import Level
 
 
 class RestoreCommand(Command):
@@ -10,11 +12,16 @@ class RestoreCommand(Command):
         self.file = file
 
     def run(self, server):
+        if server.running_pid is not None:
+            server.log.append("Please stop the server before restoring", level=ERROR)
+            return
+
+        server.log.append("Restoring game data from " + self.file)
         config = server.config
-        backup_file = config["gameBasePath"] + "/" + server.name + "/backup/" + self.file + ".zip"
+        backup_file = config["gameBasePath"] + "/" + server.name + "/backup/" + self.file
 
         if not os.path.exists(backup_file):
-            print("Backup not found")
+            server.log.append("Backup " + self.file + " Not found", level=ERROR)
             return
 
         saved_dir = config["gameBasePath"] + "/" + server.name + "/ShooterGame/Saved"
